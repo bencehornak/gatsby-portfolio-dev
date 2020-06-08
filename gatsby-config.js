@@ -46,7 +46,12 @@ module.exports = {
         name: 'projects',
       },
     },
-    'gatsby-transformer-remark',
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: ['gatsby-remark-prismjs'],
+      },
+    },
     {
       resolve: 'gatsby-plugin-nprogress',
       options: {
