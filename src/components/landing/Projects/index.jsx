@@ -17,6 +17,7 @@ function useProjects() {
         projects: { edges: gitlabEdges },
       },
     },
+    markdown: { edges: markdownEdges },
   } = useStaticQuery(
     graphql`
       {
@@ -56,25 +57,41 @@ function useProjects() {
             }
           }
         }
+        markdown: allMarkdownRemark {
+          edges {
+            node {
+              frontmatter {
+                title
+                description
+                path
+              }
+            }
+          }
+        }
       }
     `
   );
-  const edges = [
-    ...githubEdges,
+  return [
+    ...githubEdges.map(({ node }) => node),
     ...gitlabEdges
       .filter(({ node }) => node.visibility === 'public')
       .map(({ node }) => ({
-        node: {
-          id: node.id,
-          name: node.name,
-          url: node.webUrl,
-          description: node.descriptionHtml,
-          stargazers: { totalCount: node.starCount },
-          forkCount: node.forksCount,
-        },
+        id: node.id,
+        name: node.name,
+        url: node.webUrl,
+        description: node.descriptionHtml,
+        stargazers: { totalCount: node.starCount },
+        forkCount: node.forksCount,
       })),
+    ...markdownEdges.map(({ node: { frontmatter } }) => ({
+      id: frontmatter.path,
+      name: frontmatter.title,
+      url: `/project/${frontmatter.path}`,
+      description: frontmatter.description,
+      stargazers: { totalCount: 0 },
+      forkCount: 0,
+    })),
   ];
-  return edges;
 }
 
 export const Projects = () => {
@@ -83,7 +100,7 @@ export const Projects = () => {
     <Wrapper as={Container} id="projects">
       <h2>Projects</h2>
       <Grid>
-        {projects.map(({ node }) => (
+        {projects.map(node => (
           <Item key={node.id} as="a" href={node.url} target="_blank" rel="noopener noreferrer">
             <Card>
               <Content>

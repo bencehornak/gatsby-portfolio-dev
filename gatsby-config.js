@@ -40,6 +40,14 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/src/projects`,
+        name: 'projects',
+      },
+    },
+    'gatsby-transformer-remark',
+    {
       resolve: 'gatsby-plugin-nprogress',
       options: {
         color: config.themeColor,
