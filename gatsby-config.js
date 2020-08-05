@@ -16,30 +16,6 @@ module.exports = {
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
     {
-      resolve: 'gatsby-source-graphql',
-      options: {
-        typeName: 'GitHub',
-        fieldName: 'github',
-        url: 'https://api.github.com/graphql',
-        headers: {
-          Authorization: `bearer ${process.env.GATSBY_PORTFOLIO_GITHUB_TOKEN}`,
-        },
-        fetchOptions: {},
-      },
-    },
-    {
-      resolve: 'gatsby-source-graphql',
-      options: {
-        typeName: 'GitLab',
-        fieldName: 'gitlab',
-        url: 'https://gitlab.com/api/graphql',
-        headers: {
-          Authorization: `bearer ${process.env.GATSBY_PORTFOLIO_GITLAB_TOKEN}`,
-        },
-        fetchOptions: {},
-      },
-    },
-    {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/src/projects`,

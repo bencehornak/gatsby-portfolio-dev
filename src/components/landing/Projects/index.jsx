@@ -7,56 +7,10 @@ import { Wrapper, Grid, Item, Content, Stats } from './styles';
 
 function useProjects() {
   const {
-    github: {
-      viewer: {
-        repositories: { edges: githubEdges },
-      },
-    },
-    gitlab: {
-      namespace: {
-        projects: { edges: gitlabEdges },
-      },
-    },
     markdown: { edges: markdownEdges },
   } = useStaticQuery(
     graphql`
       {
-        github {
-          viewer {
-            repositories(first: 8, orderBy: { field: STARGAZERS, direction: DESC }) {
-              edges {
-                node {
-                  id
-                  name
-                  url
-                  description
-                  stargazers {
-                    totalCount
-                  }
-                  forkCount
-                }
-              }
-            }
-          }
-        }
-        gitlab {
-          namespace(fullPath: "bencehornak") {
-            projects {
-              edges {
-                node {
-                  id
-                  name
-                  visibility
-                  description
-                  descriptionHtml
-                  webUrl
-                  forksCount
-                  starCount
-                }
-              }
-            }
-          }
-        }
         markdown: allMarkdownRemark {
           edges {
             node {
@@ -72,17 +26,6 @@ function useProjects() {
     `
   );
   return [
-    ...githubEdges.map(({ node }) => node),
-    ...gitlabEdges
-      .filter(({ node }) => node.visibility === 'public')
-      .map(({ node }) => ({
-        id: node.id,
-        name: node.name,
-        url: node.webUrl,
-        description: node.descriptionHtml,
-        stargazers: { totalCount: node.starCount },
-        forkCount: node.forksCount,
-      })),
     ...markdownEdges.map(({ node: { frontmatter } }) => ({
       id: frontmatter.path,
       name: frontmatter.title,
