@@ -16,15 +16,16 @@ module.exports = {
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
     {
-      resolve: 'gatsby-source-graphql',
+      resolve: `gatsby-source-filesystem`,
       options: {
-        typeName: 'GitHub',
-        fieldName: 'github',
-        url: 'https://api.github.com/graphql',
-        headers: {
-          Authorization: `bearer ${process.env.GATSBY_PORTFOLIO_GITHUB_TOKEN}`,
-        },
-        fetchOptions: {},
+        path: `${__dirname}/src/projects`,
+        name: 'projects',
+      },
+    },
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: ['gatsby-remark-prismjs'],
       },
     },
     {
